@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - MadCakes-PartyBag
+name: Build and deploy Python app to Azure Web App - MadCakes-Partybag
 
 on:
   push:
@@ -58,14 +58,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_39F13BEAA2EE437A9F04FA0D3ADF9740 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_49BC7A0AA756422BA4795BCB207069B7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_96F921FC7F0145B198AA07CF8FC42513 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_362BF56108534CF38DF0F731B7B0657F }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CBE969D6499B4DECA5295E55347FB48F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F537E6433AA94BB7A0973E15F0172644 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'MadCakes-PartyBag'
+          app-name: 'MadCakes-Partybag'
           slot-name: 'Production'
           
