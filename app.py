@@ -16,7 +16,14 @@ app.register_blueprint(madcakes_bp)
 app.register_blueprint(partybags_bp, url_prefix="/party-bags")
 app.register_blueprint(agebp)
 
+# in app.py, after app/db setup
+@app.before_first_request
+def _ensure_db():
+    from models import db
+    db.create_all()
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(host="0.0.0.0", port=81, debug=True)
+
