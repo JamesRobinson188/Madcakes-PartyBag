@@ -22,6 +22,10 @@ app.register_blueprint(madcakes_bp)
 app.register_blueprint(partybags_bp, url_prefix="/party-bags")
 app.register_blueprint(agebp)
 
+@app.get("/healthz")
+def healthz():
+    return "ok", 200
+
 # 2) Create tables at startup (now the folder exists)
 with app.app_context():
     db.create_all()
@@ -37,3 +41,4 @@ with app.app_context():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=81, debug=True)
+
