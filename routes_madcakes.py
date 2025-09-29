@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, abort, session
+from flask import Blueprint, render_template, abort, session, current_app
 
 bp = Blueprint("madcakes", __name__)
 
@@ -68,4 +68,5 @@ def all_cakes():
         adult_verified=session.get("adult_verified", False),
         adult_slugs=ADULT_SLUGS,  # <-- add this
     )
+
 
