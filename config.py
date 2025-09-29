@@ -9,7 +9,7 @@ class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev")
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "sqlite:///" + DB_PATH.replace("\\", "/")
+        "sqlite:////home/site/data/app.db"  # 4 slashes after sqlite:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
@@ -20,3 +20,4 @@ class BaseConfig:
 
 class DevConfig(BaseConfig):
     DEBUG = True
+
