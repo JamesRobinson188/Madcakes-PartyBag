@@ -1,0 +1,18 @@
+# Web framework + server
+Flask>=3.0,<4
+gunicorn>=21.2
+
+# DB layer
+Flask-SQLAlchemy>=3.1
+SQLAlchemy>=2.0
+
+# Config/env
+python-dotenv>=1.0
+
+# Payments
+stripe>=9.0
+
+# (optional) email is stdlib; no package needed
+# (optional) If you later move to Postgres/MySQL on Azure, add a driver:
+# psycopg2-binary  (for Postgres)
+# PyMySQL          (for MySQL)

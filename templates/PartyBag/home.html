@@ -1,0 +1,113 @@
+{% extends 'PartyBag/base.html' %}
+{% block content %}
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='PartyBag/homepage.css') }}">
+</head>
+
+<div class="hero-text">
+    <H1>Fun-Filled Party Bags in Exeter 🎉</H1>
+    <p class="hero-text-small">We're a startup based in Exeter, specializing in crafting fun, customized party bags for all occasions. Our mission is to add a little extra joy to your celebrations!</p>
+    <p class="hero-text-small">From the creator of Mad Cakes!</p>
+</div>
+
+<!-- Dynamically load rows for each category -->
+{% for category, products in category_products.items() %}
+    <div class="row-of-whatever {% if category == 'NSFW' %}nsfw-row{% endif %}">
+        <div class="row-header">
+            <h3>{{ category }} Bags</h3>
+            <a class="row-link" href="{{ url_for('partybags.category', name=category) }}">View all →</a>
+        </div>
+        <div class="row-of-categories">
+            {% for product in products %}
+                <div class="category-card">
+                    <a href="{{ url_for('partybags.product', product_id=product.id) }}">
+                        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" width="200" height="200">
+                        <p>{{ product.name }}</p>
+                        <p>£{{ product.price }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+{% if order_id %}
+<!-- Order modal -->
+<div id="orderModal" class="order-modal-overlay" aria-hidden="true">
+  <div class="order-modal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+    <button class="order-modal-close" id="orderModalClose" aria-label="Close">&times;</button>
+
+    <h2 id="orderModalTitle">Thank you for your order! 🎉</h2>
+    <p class="lead">We’ve received it. Keep your Order ID handy to track progress.</p>
+
+    <div class="order-id-row" aria-live="polite">
+      <code id="orderIdText">#{{ order_id }}</code>
+      <button id="copyOrderIdBtn" class="btn-primary" type="button">Copy</button>
+    </div>
+
+    <div class="order-modal-actions">
+      <a class="btn-secondary" href="{{ url_for('partybags.order_lookup', order_id=order_id) }}">Track order</a>
+      <button class="btn-ghost" id="orderModalDismiss" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tiny toast -->
+<div id="orderToast" class="order-toast" hidden>Order ID copied</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('orderModal');
+    const closeBtn = document.getElementById('orderModalClose');
+    const dismissBtn = document.getElementById('orderModalDismiss');
+    const copyBtn = document.getElementById('copyOrderIdBtn');
+    const orderIdText = document.getElementById('orderIdText').textContent.trim();
+    const toast = document.getElementById('orderToast');
+
+    // show modal
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    const hide = () => {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+    };
+
+    // close handlers
+    closeBtn.addEventListener('click', hide);
+    dismissBtn.addEventListener('click', hide);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) hide(); // click outside to close
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hide();
+    });
+
+    // copy handler
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(orderIdText.replace(/^#/, ''));
+        toast.hidden = false;
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); toast.hidden = true; }, 1400);
+      } catch (err) {
+        // Fallback
+        const tmp = document.createElement('textarea');
+        tmp.value = orderIdText.replace(/^#/, '');
+        document.body.appendChild(tmp);
+        tmp.select(); document.execCommand('copy'); document.body.removeChild(tmp);
+        toast.hidden = false;
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); toast.hidden = true; }, 1400);
+      }
+    });
+  });
+</script>
+{% endif %}
+
+
+{% endblock %}

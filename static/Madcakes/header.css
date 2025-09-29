@@ -1,0 +1,246 @@
+/* NAV + TOP STRIP */
+.upper-menu, .main-menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 2vh 5vw;
+    font-size: 2.5vh;
+    color: #f7f2ea; /* light cream text on dark bars */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.upper-menu {
+    background: #2f221e; /* darker cocoa */
+}
+
+.main-menu {
+    align-items: center;
+    font-size: 3vh;
+    background: #3b2a26; /* cocoa nav */
+}
+
+/* LOGO */
+.main-menu .logo-link img {
+    height: 10vh;
+    vertical-align: middle;
+}
+
+/* NAV LINKS */
+.main-menu .duo-links {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    flex-wrap: nowrap;
+}
+
+.duo-links a, .main-menu a, .sub-menu a {
+    text-decoration: none;
+    color: #f7f2ea; /* cream text */
+    font-weight: bold;
+    transition: color 0.25s ease, opacity .2s ease;
+}
+
+.sub-menu a {
+    color:#3b2a26;
+}
+
+.duo-links a:hover, .main-menu a:hover, .sub-menu a:hover {
+    color: #c9a15b; /* warm gold accent */
+}
+
+/* CART ICON */
+.main-menu a.icon svg {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+/* SECTION MENU / FOOTER STRIP */
+.sub-menu {
+    display: flex;
+    padding: 2vh 5vw;
+    font-size: 2.5vh;
+    background-color: #fff7ec; /* light cream */
+    color: #2b211e; /* dark cocoa text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e8dccb;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.sub-menu h3 {
+    font-weight: bold;
+}
+
+/* FOOTER LISTS */
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* HAMBURGER */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none; 
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hamburger:focus, .hamburger:active {
+    outline: none;
+    box-shadow: none;
+    background: none;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #f7f2ea; /* light bars to contrast dark header */
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s, background .2s;
+}
+
+.hamburger:hover span {
+    background: #c9a15b; /* gold on hover */
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* BREADCRUMBS */
+.breadcrumb-nav{
+    background-color:#fff7ec; /* cream to match sub-menu */
+    box-shadow:0 4px 8px rgba(0,0,0,.05);
+    border-bottom:1px solid #e8dccb;
+
+    padding:1.5vh 5vw;
+    font-size:2.25vh;
+    font-family:'Atma',sans-serif;
+    color:#2b211e;
+}
+
+.breadcrumb-list{
+    margin:0;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:1vw;
+}
+
+.breadcrumb-item{
+    display:flex;
+    align-items:center;
+    color:#2b211e;
+    font-weight:600;
+}
+
+/* arrow separator in gold */
+.breadcrumb-item + .breadcrumb-item::before{
+    content:"›";
+    margin:0 .5vw;
+    color:#c9a15b;
+    font-weight:700;
+}
+
+.breadcrumb-item a{
+    text-decoration:none;
+    color:#2b211e;
+    transition:color .2s ease;
+}
+.breadcrumb-item a:hover{
+    color:#8b5e3c; /* caramel hover */
+}
+
+/* MOBILE */
+@media only screen and (max-width: 768px) {
+    .upper-menu { display: none; }
+    .hamburger { display: flex; }
+    .logo-link img { display: none; }
+
+    .nav-menu {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        padding: 0 5vw;
+        flex-direction: column;
+        gap: 2vh;
+        align-items: flex-start;
+        justify-content: flex-start;
+        transition: max-height 0.35s ease-out, opacity 0.2s ease-out, padding 0.2s ease-out;
+        background:#3b2a26; /* keep dark background when open */
+    }
+
+    .nav-menu.open {
+        max-height: 30rem;
+        opacity: 1;
+        padding: 2vh 5vw;
+        transition: max-height 0.25s ease-in, opacity 0.2s ease-in, padding 0.2s ease-in;
+    }
+
+    .breadcrumb-nav { display: none; }
+
+    .sub-menu.footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        text-align: center;
+        box-shadow: none;
+        border-top: 1px solid #e8dccb;
+    }
+
+    .sub-menu.footer .logo-link img {
+        display: none;
+        height: 0;
+        max-height: 0;
+        margin: 0;
+    }
+
+    .sub-menu.footer .list {
+        width: 100%;
+        max-width: 520px;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .sub-menu.footer .list h3 {
+        margin-bottom: 0.25rem;
+        font-size: 2.4vh;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+    }
+
+    .sub-menu.footer .list a {
+        display: block;
+        padding: 0.4rem 0;
+    }
+
+    .sub-menu.footer .footer-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+
+    .sub-menu.footer,
+    .sub-menu.footer a {
+        font-size: 2.1vh;
+        color:#2b211e;
+    }
+}

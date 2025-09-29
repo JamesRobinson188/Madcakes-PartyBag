@@ -1,0 +1,126 @@
+{% extends "Madcakes/base.html" %}
+{% block content %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Madcakes/all-cakes.css') }}">
+</head>
+
+<section class="sections">
+  <h2 class="sections__title">All Cakes</h2>
+
+  <div class="card-grid">
+  {% for slug, name in categories.items() %}
+    {% set imgs = previews.get(slug, []) %}
+    {% set is_adult = (slug in adult_slugs) and not adult_verified %}
+    <a class="cake-card" href="/{{ slug }}"
+      data-images='{{ imgs|tojson }}'
+      data-adult="{{ '1' if is_adult else '0' }}"
+      aria-label="{{ name }} (opens category)">
+      <figure class="cake-card__media" aria-hidden="true">
+        <img class="cake-card__img is-visible" alt="" loading="lazy">
+        <img class="cake-card__img" alt="" loading="lazy">
+      </figure>
+      <div class="cake-card__body">
+        <h3 class="cake-card__title">{{ name }}</h3>
+        <p class="cake-card__desc">{{ descriptions.get(slug, '') }}</p>
+      </div>
+    </a>
+  {% endfor %}
+
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const TICK_MS = 1000;       // fire every second
+  const COOLDOWN_MS = 6000;   // a given card won't change again for 6s
+  const ACTIVE_ONLY_IN_VIEW = true;
+
+  const cards = Array.from(document.querySelectorAll('.cake-card'));
+  const registry = [];
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const state = registry.find(r => r.card === e.target);
+      if (!state) return;
+      state.inView = e.isIntersecting;
+      if (e.isIntersecting && !state.seeded) seed(state);
+    });
+  }, { threshold: 0.1 });
+
+  function seed(state) {
+    const { images, imgA, imgB } = state;
+    if (!images.length) return;
+    state.current = 0;
+    imgA.src = images[0];
+    imgB.src = images[(1) % images.length || 0];
+    state.showingA = true;
+    state.seeded = true;
+  }
+
+  function init(card) {
+    const images = JSON.parse(card.dataset.images || '[]');
+    const [imgA, imgB] = card.querySelectorAll('.cake-card__img');
+    const st = {
+      card, images, imgA, imgB,
+      showingA: true,
+      current: 0,
+      lastChange: 0,
+      inView: false,
+      paused: false,
+      seeded: false,
+    };
+
+    card.addEventListener('pointerenter', () => st.paused = true);
+    card.addEventListener('pointerleave', () => st.paused = false);
+    card.addEventListener('focusin', () => st.paused = true);
+    card.addEventListener('focusout', () => st.paused = false);
+
+    registry.push(st);
+    io.observe(card);
+  }
+
+  function crossfade(st) {
+    if (reduceMotion) return;
+    const { images, imgA, imgB } = st;
+    if (!images.length) return;
+
+    st.current = (st.current + 1) % images.length;
+
+    if (st.showingA) {
+      imgB.src = images[st.current];
+      imgB.classList.add('is-visible');
+      imgA.classList.remove('is-visible');
+    } else {
+      imgA.src = images[st.current];
+      imgA.classList.add('is-visible');
+      imgB.classList.remove('is-visible');
+    }
+    st.showingA = !st.showingA;
+    st.lastChange = performance.now();
+
+    const nextIdx = (st.current + 1) % images.length;
+    const pre = new Image(); pre.src = images[nextIdx];
+  }
+
+  function tick() {
+    if (reduceMotion) return;
+    const now = performance.now();
+    const eligible = registry.filter(st => {
+      if (!st.seeded) return false;
+      if (st.paused) return false;
+      if (ACTIVE_ONLY_IN_VIEW && !st.inView) return false;
+      return (now - st.lastChange) >= COOLDOWN_MS;
+    });
+
+    if (eligible.length) {
+      const choice = eligible[Math.floor(Math.random() * eligible.length)];
+      crossfade(choice);
+    }
+  }
+
+  cards.forEach(init);
+  if (!reduceMotion) setInterval(tick, TICK_MS);
+})();
+</script>
+{% endblock %}

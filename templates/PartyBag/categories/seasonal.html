@@ -1,0 +1,52 @@
+{% extends 'PartyBag/base.html' %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PartyBag/categories.css') }}">
+    <style>
+        body{
+            background-color: #FFE7D4;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'%3E%3Crect x='0' y='0' width='46' height='46' fill-opacity='0.6' fill='%23D4E7FF'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+
+<h1>All the Seasonal Bags!</h1>
+<h2>Pick the perfect finishing touches for your party bags.</h2>
+
+{% if products %}
+    {% for subcat, items in products|groupby('subcategory') %}
+        <hr class="section-divider">
+        <h2 style="font-weight: bold;" class="subcategory-title">{{ subcat or 'Uncategorized' }}</h2>
+        <div class="extras-grid">
+            {% for product in items %}
+            <div class="category-card extras-card">
+                <a href="{{ url_for('product', product_id=product.id) }}">
+                    {% if product.image %}
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" width="220" height="220">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='imgs/no_image.png') }}" alt="No image" width="220" height="220">
+                    {% endif %}
+                    <p>{{ product.name }}</p>
+                    <p>£{{ product.price }}</p>
+                </a>
+
+                {% if product.stock > 0 %}
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit">Add to Cart</button>
+                </form>
+                {% else %}
+                <p style="color:red;">Out of stock</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% else %}
+<div class="row-of-whatever">
+    <h1>No birthday bags are available right now - please check back soon!</h1>
+</div>
+{% endif %}
+
+{% endblock %}

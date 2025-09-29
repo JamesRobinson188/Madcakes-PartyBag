@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Mad Cakes Exeter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>About Us</h1>
+        <p>We cater for all occasions, offering bespoke cakes at an affordable price. Whether it’s your birthday, 
+        a wedding, or just because it’s Monday – we bake something special for you!</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mad Cakes Exeter</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+{% extends 'PartyBag/base.html' %}
+{% block content %}
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='PartyBag/product.css') }}">
+    </head>
+
+    <div class="product-page">
+        <div class="product">
+            <div class="product-hero">
+                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" width="400" height="400">
+            </div>
+
+            <div class="product-info">
+                <h1>{{ product.name }}</h1>
+                <h2>£{{ product.price }}</h2>
+                <h3><span class="label">Category:</span> {{ product.subcategory }}</h3>
+
+                {% if product.category != 'Extras' %}
+                    <p><span class='label'>Includes:</span></p>
+                    <ul>
+                        {% for item in product.description.split('\n') %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <div class="stock">
+                    {% if product.stock > 0 %}
+                        {% if product.stock < 10 %}
+                            <p class="yellow"><span class="label">Only {{ product.stock }} Left!</span></p>
+                        {% else %}
+                            <p class="green"><span class="label">In Stock</span></p>
+                        {% endif %}
+
+                        <p><span class="label">Quantity:</span></p>
+                        <input type="number" id="quantity" value="1" min="1" max="{{ product.stock }}">
+
+                        <form action="{{ url_for('partybags.add_to_cart', product_id=product.id) }}" method="POST" onsubmit="updateQuantityInputs();">
+                            <input type="hidden" id="quantity_cart" name="quantity" value="1">
+                            <button type="submit" class="add-to-cart">Add to cart</button>
+                        </form>
+
+                        {% if product.category != 'Extras' %}
+                            <form action="{{ url_for('partybags.buy_now', product_id=product.id) }}" method="POST" onsubmit="updateQuantityInputs();">
+                                <input type="hidden" id="quantity_buy_now" name="quantity" value="1">
+                                <button type="submit" class="buy-now">Buy Now</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <p class="red"><span class="label">Out of Stock 😔</span></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        {% if recommendations %}
+            <section class="recommended-products">
+                <h2 class="section-heading">You May Also Like</h2>
+                <div class="extras-grid">
+                    {% for rec in recommendations %}
+                        <div class="extras-card">
+                            <a href="{{ url_for('partybags.product', product_id=rec.id) }}" class="card-link">
+                                <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
+                                <p>{{ rec.name }}</p>
+                                <p>£{{ rec.price }}</p>
+                            </a>
+                            <form action="{{ url_for('partybags.add_to_cart', product_id=rec.id) }}" method="POST">
+                                <input type="hidden" name="quantity" value="1">
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {% if extras_suggestions %}
+            <section class="extras-suggestions">
+                <h2 class="section-heading">Related Extras</h2>
+                <div class="extras-grid">
+                    {% for extra in extras_suggestions %}
+                        <div class="extras-card">
+                            <a href="{{ url_for('partybags.product', product_id=extra.id) }}" class="card-link">
+                                <img src="{{ url_for('static', filename=extra.image) }}" alt="{{ extra.name }}">
+                                <p>{{ extra.name }}</p>
+                                <p>£{{ extra.price }}</p>
+                            </a>
+                            <form action="{{ url_for('partybags.add_to_cart', product_id=extra.id) }}" method="POST">
+                                <input type="hidden" name="quantity" value="1">
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
+
+    <script>
+        function updateQuantityInputs() {
+            const q = document.getElementById('quantity').value;
+            document.getElementById('quantity_cart').value = q;
+            {% if product.category != 'Extras' %}
+                document.getElementById('quantity_buy_now').value = q;
+            {% endif %}
+        }
+    </script>
+{% endblock %}

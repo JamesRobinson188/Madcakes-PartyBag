@@ -1,0 +1,289 @@
+{% extends "Madcakes/base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Madcakes/gallery.css') }}">
+</head>
+
+<nav class="gallery-nav" aria-label="Gallery categories">
+    <div class="gallery-nav__inner" role="tablist">
+        {% for slug, name in categories.items() %}
+            {% set is_active = request.path.strip('/').split('/')[-1] == slug %}
+            <a
+                class="pill {{ 'is-active' if is_active }}"
+                href="/{{ slug }}"
+                role="tab"
+                aria-selected="{{ 'true' if is_active else 'false' }}"
+                aria-current="{{ 'page' if is_active }}"
+            >
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+</nav>
+
+<section class="sections">
+    <h2 class="sections__title">{{ title }}</h2>
+
+    <div class="gallery-grid">
+        {% for img in images %}
+            <button class="gallery-item" data-index="{{ loop.index0 }}" aria-label="Open image {{ loop.index }} of {{ images|length }}">
+                <img src="{{ img }}" alt="{{ title }} {{ loop.index }}" loading="lazy">
+                <span class="zoom-indicator" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </span>
+            </button>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="lightbox__close" aria-label="Close (Esc)">
+        &times;
+    </button>
+
+    <button class="lightbox__nav lightbox__nav--prev" aria-label="Previous image">
+        &#10094;
+    </button>
+    <figure class="lightbox__figure">
+        <img class="lightbox__img" alt="" />
+        <figcaption class="lightbox__caption"></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next" aria-label="Next image">
+        &#10095;
+    </button>
+</div>
+
+{% if show_age_gate %}
+<style>
+    :root {
+        --c-bg: #ffffff;
+        --c-cream: #fff7ec;
+        --c-border: #e8dccb;
+        --c-text: #2b211e;
+        --c-cocoa: #3b2a26;
+        --c-cocoa-dark: #2f221e;
+        --c-gold: #c9a15b;
+        --radius-xl: 20px;
+        --shadow-lg: 0 18px 42px rgba(0, 0, 0, .12);
+    }
+    #ageModal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(20, 14, 12, .55);
+        backdrop-filter: blur(20px) saturate(0.9) brightness(0.95);
+        z-index: 9999;
+    }
+    #ageModal.is-open {
+        display: flex;
+    }
+    #ageModalContent {
+        width: min(92vw, 420px);
+        background: var(--c-bg);
+        border: 1px solid var(--c-border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        padding: 1.25rem 1.25rem 1.35rem;
+        text-align: center;
+    }
+    #ageModalContent h2 {
+        margin: 0 0 .4rem;
+        color: var(--c-cocoa-dark);
+    }
+    #dob, #dobSubmit {
+        width: 100%;
+        padding: .7rem .8rem;
+        font-size: 1rem;
+        border-radius: 12px;
+        border: 1px solid var(--c-border);
+    }
+    #dobSubmit {
+        margin-top: .7rem;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(180deg, #fff, #fff8ef);
+        color: var(--c-cocoa);
+        border-color: var(--c-gold);
+        box-shadow: 0 10px 24px rgba(201, 161, 91, .18);
+        transition: transform .12s ease, filter .2s ease;
+    }
+    #dobSubmit:hover {
+        transform: translateY(-1px);
+        filter: brightness(.98);
+    }
+    #ageError {
+        color: #c00;
+        margin-top: .5rem;
+        min-height: 1.2em;
+    }
+</style>
+
+<div id="ageModal" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
+    <div id="ageModalContent">
+        <h2 id="ageTitle">Age Verification</h2>
+        <p>Please enter your date of birth (DD/MM/YYYY):</p>
+        <input type="text" id="dob" placeholder="DD/MM/YYYY" inputmode="numeric" autocomplete="bday" aria-describedby="ageError">
+        <div id="ageError" role="status" aria-live="polite"></div>
+        <button id="dobSubmit">Submit</button>
+    </div>
+</div>
+{% endif %}
+
+<script>
+(function () {
+    const images = {{ images|tojson }};
+    const title = {{ title|tojson }};
+
+    const items = Array.from(document.querySelectorAll('.gallery-item'));
+    const lightbox = document.querySelector('.lightbox');
+    const lbImg = document.querySelector('.lightbox__img');
+    const lbCaption = document.querySelector('.lightbox__caption');
+    const btnClose = document.querySelector('.lightbox__close');
+    const btnPrev = document.querySelector('.lightbox__nav--prev');
+    const btnNext = document.querySelector('.lightbox__nav--next');
+
+    let current = 0;
+    let lastFocused = null;
+    let touchStartX = null;
+
+    function open(index) {
+        current = index;
+        update();
+        lastFocused = document.activeElement;
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('no-scroll');
+        btnClose.focus();
+    }
+
+    function close() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+        if (lastFocused) lastFocused.focus();
+    }
+
+    function update() {
+        const src = images[current];
+        lbImg.src = src;
+        lbImg.alt = `${title} ${current + 1}`;
+        lbCaption.textContent = `${title} — ${current + 1} / ${images.length}`;
+        [current - 1, current + 1].forEach(i => {
+            if (i >= 0 && i < images.length) {
+                const pre = new Image();
+                pre.src = images[i];
+            }
+        });
+    }
+
+    function prev() {
+        current = (current - 1 + images.length) % images.length;
+        update();
+    }
+
+    function next() {
+        current = (current + 1) % images.length;
+        update();
+    }
+
+    items.forEach(btn => {
+        btn.addEventListener('click', () => open(parseInt(btn.dataset.index, 10)));
+    });
+
+    btnClose.addEventListener('click', close);
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+
+    lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', e => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowLeft') prev();
+        if (e.key === 'ArrowRight') next();
+    });
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        if (touchStartX === null) return;
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(dx) > 40) {
+            dx > 0 ? prev() : next();
+        }
+        touchStartX = null;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    items.forEach(i => observer.observe(i));
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('ageModal');
+    if (!modal) return;
+
+    const dob = document.getElementById('dob');
+    const err = document.getElementById('ageError');
+    const btn = document.getElementById('dobSubmit');
+
+    {% if show_age_gate %}
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    {% endif %}
+
+    function normalizeUk(v) {
+        v = v.replace(/[.\- ]/g, '/').trim();
+        if (/^\d{8}$/.test(v)) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
+        return v;
+    }
+
+    btn.addEventListener('click', async () => {
+        err.textContent = '';
+        const value = normalizeUk(dob.value);
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+            err.textContent = 'Please enter your date in DD/MM/YYYY format.';
+            return;
+        }
+        try {
+            const r = await fetch('/age/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dob: value })
+            });
+            if (r.ok) {
+                localStorage.setItem('dobVerified', 'true');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            } else {
+                const j = await r.json().catch(() => ({}));
+                err.textContent = j.error === 'underage'
+                    ? 'Sorry, you must be 18 or older to view this content.'
+                    : 'That date didn’t look right—please try again.';
+            }
+        } catch (e) {
+            err.textContent = 'Network error—please try again.';
+        }
+    });
+});
+</script>
+
+{% endblock %}

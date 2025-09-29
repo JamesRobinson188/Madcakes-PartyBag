@@ -1,0 +1,172 @@
+.hero,
+.sections,
+.ribbon,
+.contact {
+    padding: 6vh 5vw;
+}
+
+.sections {
+    padding-top: 4vh;
+}
+
+.hero {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2)), url("/static/Madcakes/imgs/banner.jpg") center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    border-radius: 16px;
+}
+
+.hero__inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: #fff !important;
+}
+
+.hero p {
+    margin: 0.25rem 0 0.75rem 0;
+    line-height: 1.6;
+    color: #fff !important;
+}
+
+.hero__contact a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.hero__cta {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    border-radius: 14px;
+    background: #c9a15b;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+    filter: brightness(0.95);
+}
+
+.sections__title {
+    text-align: center;
+    margin: 0 0 1.25rem 0;
+}
+
+.grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e8dccb;
+    border-radius: 16px;
+    overflow: hidden;
+    color: inherit;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.card h3 {
+    margin: 0.9rem 0 1.1rem 0;
+}
+
+.ribbon {
+    background: #fff7ec;
+    border: 1px solid #e8dccb;
+    border-radius: 20px;
+    text-align: center;
+    padding: 4vh 3vw;
+    max-width: 800px;
+    margin: 4rem auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,.05);
+}
+
+.ribbon__inner h2 {
+    margin: 0 0 .75rem 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: #3b2a26;
+}
+
+.ribbon__inner p {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.ribbon__inner a.btn {
+    margin-top: .5rem;
+}
+
+
+.contact {
+    text-align: center;
+}
+
+.contact .map iframe {
+    border-radius: 12px;
+}
+
+.contact h2 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    margin-bottom: 1rem;
+}
+
+.contact__details {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    background: #fff;
+    border: 1px solid #e8dccb;
+    border-radius: 14px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
+
+
+a:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid #c9a15b;
+    outline-offset: 3px;
+}

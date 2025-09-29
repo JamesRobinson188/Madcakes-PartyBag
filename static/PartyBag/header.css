@@ -1,0 +1,251 @@
+.upper-menu, .main-menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 2vh 5vw;
+    font-size: 2.5vh;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc;
+}
+
+.upper-menu {
+    background: linear-gradient(135deg, #ffe7d4, #ffcad4);
+}
+
+.main-menu {
+    align-items: center;
+    font-size: 3vh;
+    background: #fff;
+}
+
+.main-menu .logo-link img {
+    height: 10vh;
+    vertical-align: middle;
+}
+
+
+.main-menu .duo-links {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    flex-wrap: nowrap;
+}
+
+.duo-links a, .main-menu a, .sub-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.duo-links a:hover, .main-menu a:hover, .sub-menu a:hover {
+    color: #ff6f61;
+}
+
+.main-menu a.icon svg {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    transition: fill 0.3s ease;
+}
+
+
+.sub-menu {
+    display: flex;
+    padding: 2vh 5vw;
+    font-size: 2.5vh;
+    background-color: #fff4e6;
+    color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #ccc;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.sub-menu h3 {
+    font-weight: bold;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none; 
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hamburger:focus, .hamburger:active {
+    outline: none;
+    box-shadow: none;
+    background: none;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.hamburger:hover span {
+    background: #ff6f61;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+.breadcrumb-nav{
+    /* same cream background used for .sub-menu */
+    background-color:#fff4e6;
+    /* subtle shadow + divider to echo the menus */
+    box-shadow:0 4px 8px rgba(0,0,0,.05);
+    border-bottom:1px solid #ccc;
+
+    padding:1.5vh 5vw;
+    font-size:2.25vh;   /* splits the difference between upper & sub menus */
+    font-family:'Atma',sans-serif;
+}
+
+.breadcrumb-list{
+    margin:0;
+    padding:0;
+    list-style:none;
+
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:1vw;            /* breathing room between crumbs */
+}
+
+.breadcrumb-item{
+    display:flex;
+    align-items:center;
+    color:#333;
+    font-weight:500;
+}
+
+/* arrow separator — inherits the hover colour */
+.breadcrumb-item + .breadcrumb-item::before{
+    content:"›";
+    margin:0 .5vw;
+    color:#ff6f61;
+    font-weight:600;
+}
+
+/* links behave like the rest of your menu links */
+.breadcrumb-item a{
+    text-decoration:none;
+    color:#333;
+    transition:color .3s ease;
+}
+.breadcrumb-item a:hover{
+    color:#ff6f61;
+}
+
+@media only screen and (max-width: 768px) {
+    .upper-menu {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .logo-link img {
+        display: none;
+    }
+
+    .nav-menu {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        padding: 0 5vw;
+        flex-direction: column;
+        gap: 2vh;
+        align-items: flex-start;
+        justify-content: flex-start;
+        transition: max-height 0.35s ease-out, opacity 0.2s ease-out, padding 0.2s ease-out;
+    }
+
+    .nav-menu.open {
+        max-height: 30rem;
+        opacity: 1;
+        padding: 2vh 5vw;
+        transition: max-height 0.25s ease-in, opacity 0.2s ease-in, padding 0.2s ease-in;
+    }
+
+    .breadcrumb-nav {
+        display: none;
+    }
+
+    .sub-menu.footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        text-align: center;
+        box-shadow: none;
+        border-top: 1px solid #eee;
+    }
+
+    .sub-menu.footer .logo-link img {
+        display: none;
+        height: 0;
+        max-height: 0;
+        margin: 0;
+    }
+
+    .sub-menu.footer .list {
+        width: 100%;
+        max-width: 520px;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .sub-menu.footer .list h3 {
+        margin-bottom: 0.25rem;
+        font-size: 2.4vh;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+    }
+
+    .sub-menu.footer .list a {
+        display: block;
+        padding: 0.4rem 0;
+    }
+
+    .sub-menu.footer .footer-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+
+    .sub-menu.footer,
+    .sub-menu.footer a {
+        font-size: 2.1vh;
+    }
+}

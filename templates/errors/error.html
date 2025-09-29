@@ -1,0 +1,42 @@
+{% extends 'Madcakes/base.html' %}
+{% block content %}
+<head>
+    <style>
+        .error-container {
+            text-align: center;
+            margin: 10vh auto;
+            padding: 4vh;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffe7d4, #ffcad4);
+            color: #333;
+            font-family: 'Atma', sans-serif;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .error-code {
+            font-size: 12vh;
+            font-family: 'Anton', sans-serif;
+            color: #ff5e5e;
+            margin-bottom: 1vh;
+        }
+        .error-message {
+            font-size: 3vh;
+            margin-bottom: 2vh;
+        }
+        .error-home-link {
+            font-weight: 600;
+            text-decoration: none;
+            color: #ff4d6d;
+        }
+        .error-home-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<div class="error-container">
+    <div class="error-code">{{ code }}</div>
+    <div class="error-message">{{ message }}</div>
+    <a class="error-home-link" href="/">← Go back to the homepage</a>
+</div>
+{% endblock %}

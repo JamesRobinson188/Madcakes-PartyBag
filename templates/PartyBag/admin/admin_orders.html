@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Partybag/admin_orders.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="wrap">
+    <h1>Orders</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, msg in messages %}
+            <li class="flash {{ category }}">{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <div class="card-head">
+        <div class="sub">Manage order statuses. Setting an order to <strong>Completed</strong> will remove the order.</div>
+
+      </div>
+
+      <div class="table-wrap">
+        <table aria-label="Orders table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Placed</th>
+              <th>Items</th>
+              <th class="right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+              <tr>
+                <td class="orderid">#{{ o.order_id }}</td>
+                <td class="muted">{{ o.email or '—' }}</td>
+                <td>
+                <span class="badge {{ o.status|lower if o.status in ['received','processing','shipped'] else '' }}">
+                    {{ o.status|capitalize }}
+                </span>
+                <form class="status-form" method="POST" action="{{ url_for('partybags.admin_update_order', order_id=o.order_id) }}">
+                    <select name="status" class="status-select" aria-label="Update status for {{ o.order_id }}">
+                    {% for s in STATUS_OPTIONS %}
+                        <option value="{{ s }}" {% if s == o.status %}selected{% endif %}>{{ s|capitalize }}</option>
+                    {% endfor %}
+                    </select>
+                    <button class="btn" type="submit">Update</button>
+                </form>
+                </td>
+                <td>{{ o.created_at.strftime('%Y-%m-%d') if o.created_at else '—' }}</td>
+                <td>
+                  {% if o.items %}
+                    <ul class="items-list">
+                      {% for it in o.items %}
+                        <li>{{ it.get('name','Item') }} ×{{ it.get('qty',1) }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
+                </td>
+                <td class="total">
+                  {% set ns = namespace(total=0) %}
+                  {% for it in (o.items or []) %}
+                    {% set subtotal = it.get('subtotal_pence', (it.get('unit_amount_pence', 0) * it.get('qty', 1))) %}
+                    {% set ns.total = ns.total + (subtotal or 0) %}
+                  {% endfor %}
+                  £{{ ('%.2f' % (ns.total / 100)) }}
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="6" class="muted" style="text-align:center; padding: 18px;">No orders yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

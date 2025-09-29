@@ -1,0 +1,176 @@
+:root {
+    --bg: #f3f5f7;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --ring: rgba(2, 132, 199, .15);
+    --brand: #0ea5e9;
+    --brand-dark: #0284c7;
+    --chip-bg: #f1f5f9;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 24px;
+}
+
+.wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+h1 {
+    margin: 6px 0 18px;
+    font-size: 28px;
+    font-weight: 750;
+    letter-spacing: .2px;
+}
+
+/* flashes */
+.flashes { list-style: none; padding: 0; margin: 0 0 16px; }
+.flash {
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    font-weight: 600;
+}
+.flash.error   { background: #fee2e2; border-color: #fecaca; color: #7f1d1d; }
+.flash.success { background: #dcfce7; border-color: #bbf7d0; color: #14532d; }
+
+/* card */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
+    overflow: hidden;
+}
+
+/* Status badges in admin orders */
+.badge {
+  padding:.35rem .65rem;
+  border-radius:999px;
+  font-weight:700;
+  font-size:.85rem;
+  display:inline-block;
+}
+
+/* received = green */
+.badge.received {
+  background:#e7f9ec;
+  color:#257a3e;
+  border:1px solid #b7efc5;
+}
+
+/* processing = blue */
+.badge.processing {
+  background:#eef4ff;
+  color:#183a8a;
+  border:1px solid #c4d7ff;
+}
+
+/* shipped = orange */
+.badge.shipped {
+  background:#fff6e6;
+  color:#8a5200;
+  border:1px solid #ffd699;
+}
+
+
+
+/* table */
+.table-wrap { overflow-x: auto; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    min-width: 780px;
+}
+thead th {
+    text-align: left;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 14px;
+    font-weight: 700;
+    color: #111827;
+}
+tbody td {
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+
+/* small bits */
+.orderid { font-weight: 800; letter-spacing: .2px; }
+.muted { color: var(--muted); }
+.items-list { margin: 0; padding-left: 18px; }
+.items-list li { margin: 2px 0; }
+
+/* status & form */
+.status-form {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.status-select {
+    appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+}
+.status-select:focus { box-shadow: 0 0 0 4px var(--ring); }
+.btn {
+    border: none;
+    background: var(--brand);
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.btn:hover { background: var(--brand-dark); }
+
+/* chip for status view (optional) */
+.chip {
+    display: inline-block;
+    background: var(--chip-bg);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    border: 1px solid var(--border);
+}
+
+/* totals cell */
+.total {
+    font-weight: 800;
+}
+
+/* header row padding */
+.card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 16px 0;
+}
+.card-head .sub { color: var(--muted); font-size: 14px; }
+
+@media (max-width: 720px) {
+    body { padding: 16px; }
+    h1 { font-size: 24px; }
+}

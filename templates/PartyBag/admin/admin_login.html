@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main stylesheet for this page -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='PartyBag/admin_login.css') }}">
+</head>
+<body>
+  <h1>Admin Login</h1>
+
+  {# ── flash messages ─────────────────────────────── #}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul id="flashes">
+        {% for category, msg in messages %}
+          <li class="{{ category }}">{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {# ── sign-in form ────────────────────────────────── #}
+  <form id="login-form" method="POST" action="{{ url_for('partybags.admin_login') }}">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="admin_password">Password</label>
+    <input type="password" id="admin_password" name="admin_password" required>
+
+    <button type="submit">Login</button>
+  </form>
+
+  {# ── first-login password-change modal ───────────── #}
+  <div id="pw-modal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="close-btn" id="close-modal">&times;</span>
+      <h2>Change your password</h2>
+
+      <form method="POST" action="{{ url_for('partybags.admin_change_password') }}">
+        <input type="hidden" name="username"
+               value="{{ username if first_login else '' }}">
+
+        <label for="old_password">Current password</label>
+        <input type="password" id="old_password" name="old_password" required>
+
+        <label for="new_password">New password</label>
+        <input type="password" id="new_password" name="new_password" required>
+
+        <label for="confirm_password">Confirm new password</label>
+        <input type="password" id="confirm_password"
+               name="confirm_password" required>
+
+        <button type="submit">Update password</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const showModal = {{ 'true' if first_login else 'false' }};
+
+      if (showModal) {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('pw-modal').style.display = 'flex';
+      }
+
+      document.getElementById('close-modal').addEventListener('click', () => {
+        document.getElementById('pw-modal').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>

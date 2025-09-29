@@ -1,0 +1,69 @@
+{% extends 'Madcakes/base.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PartyBag/contact.css') }}">
+</head>
+
+<div class="hero-text">
+  <h1>Contact Us ✉️</h1>
+  <p class="hero-text-small">Questions, custom requests, or bulk orders? Send us a message and we’ll get back to you.</p>
+</div>
+
+<div class="contact-wrap row-of-whatever">
+  <h2 class="section-heading">Send a Message</h2>
+
+  <!-- flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="alert {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form class="contact-form" method="POST" action="{{ url_for('partybags.contact') }}" onsubmit="disableSend(this)">
+    <!-- Honeypot -->
+    <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+
+    <div>
+      <label for="name">Your Name *</label>
+      <input id="name" name="name" type="text" required placeholder="Jane Doe">
+    </div>
+
+    <div>
+      <label for="email">Email Address *</label>
+      <input id="email" name="email" type="email" required placeholder="you@example.com">
+    </div>
+
+    <div>
+      <label for="phone">Phone (optional)</label>
+      <input id="phone" name="phone" type="tel" placeholder="07123 456789">
+    </div>
+
+    <div>
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" placeholder="Order enquiry / Custom party bags">
+    </div>
+
+    <div class="full">
+      <label for="message">Message *</label>
+      <textarea id="message" name="message" required placeholder="Tell us what you’re looking for..."></textarea>
+    </div>
+
+    <div class="full contact-actions">
+      <button type="submit" class="btn-primary">Send Message</button>
+      <small style="color:#666;">We’ll reply by email as soon as possible.</small>
+    </div>
+  </form>
+</div>
+
+<script>
+  function disableSend(form) {
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+/* Keep Atma for consistency, add a classy serif for headings if desired */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap');
+
+p, a, h1, h2, h3, h4, h5, li {
+    font-family: "Atma", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    color: #2b211e;
+}
+
+h1, h2 {
+    font-family: "Playfair Display", serif;
+    letter-spacing: .01em;
+}
+
+@media (min-width: 768px) {
+    body {
+        display: block;
+        margin: 0px;
+        background: #ffffff;
+    }
+
+    .homepage {
+        margin: 0vh 10vh;
+    }
+}

@@ -1,0 +1,81 @@
+{% extends "Madcakes/base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Madcakes/index.css') }}">
+</head>
+
+<section class="hero">
+    <div class="hero__inner">
+        <h1>We bake bespoke cakes</h1>
+        <p>
+            From elegant wedding tiers to fun, one-off designs — we create cakes that fit
+            your story and your budget.
+        </p>
+        <p class="hero__contact">
+            Call <a href="tel:07734818900">07734&nbsp;818900</a> ·
+            <a href="mailto:madcakes@sky.com">madcakes@sky.com</a>
+        </p>
+        <div class="hero__cta">
+            <a class="btn" href="/all-cakes">All Cakes</a>
+        </div>
+    </div>
+</section>
+
+<section class="sections">
+    <h2 class="sections__title">What we do</h2>
+
+    <div class="grid">
+        <a class="card" href="/wedding-cakes">
+            <img src="/static/Madcakes/imgs/gallery/wedding-cakes/1335B1A9-368F-D0E0-CD7B-E23DD55F676C.jpg" alt="Mr and Mrs cake">
+            <h3>Wedding Cakes</h3>
+        </a>
+
+        <a class="card" href="/birthday-cakes">
+            <img src="/static/Madcakes/imgs/gallery/birthday-cakes/04EEEDAB-39FD-4055-B186-DAD476BF5B63.jpg" alt="Angry Birds themed cake">
+            <h3>Birthday Cakes</h3>
+        </a>
+
+        <a class="card" href="/novelty-cakes">
+            <img src="/static/Madcakes/imgs/gallery/novelty-cakes/5930D0CC-AD49-E599-2B53-4325F5F491FB.jpg" alt="Iron Man themed cake">
+            <h3>Novelty Cakes</h3>
+        </a>
+
+        <a class="card" href="/cupcakes">
+            <img src="/static/Madcakes/imgs/gallery/cupcakes/423DDB5B-2911-6588-24D1-FDE941DDA3D6.jpg" alt="Dad cupcake">
+            <h3>Cupcakes</h3>
+        </a>
+    </div>
+</section>
+
+<section class="ribbon">
+    <div class="ribbon__inner">
+        <h2>Make the party complete 🎉</h2>
+            <p>
+                Planning a celebration? Add matching <a href="/party-bags">Party Bags</a>
+                for a coordinated look and stress-free hosting.
+            </p>
+        <a class="btn" href="/party-bags">Explore Party Bags</a>
+    </div>
+</section>
+
+<section class="contact">
+    <h2>Find us</h2>
+    <div class="contact__details">
+        <p>22 Blenheim Road, Alphington, Exeter EX2 8SE</p>
+        <p>
+        Tel: <a href="tel:07734818900">07734&nbsp;818900</a> ·
+        Email: <a href="mailto:madcakes@sky.com">madcakes@sky.com</a>
+        </p>
+    </div>
+    <div class="map">
+        <iframe
+            title="Mad Cakes on Google Maps"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2526.9192897009216!2d-3.534966784164976!3d50.70288227702449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486da69b48329a13%3A0xe03c1ac53a6772fe!2sMad%20Cakes!5e0!3m2!1sen!2suk!4v1503681516493"
+            width="100%" height="300" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
+        </iframe>
+    </div>
+</section>
+
+
+{% endblock %}
