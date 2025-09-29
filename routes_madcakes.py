@@ -31,19 +31,19 @@ ADULT_SLUGS = {"adult-novelty-cakes"}
 
 @bp.get("/")
 def index():
-    return render_template("madcakes/index.html", categories=CATEGORIES)
+    return render_template("Madcakes/index.html", categories=CATEGORIES)
 
 @bp.get("/<slug>")
 def show_category(slug):
     title = CATEGORIES.get(slug)
     if not title: abort(404)
-    folder = os.path.join("static", "Madcakes", "imgs", "gallery", slug)
+    folder = os.path.join(current_app.root_path, "static", "Madcakes", "imgs", "gallery", slug)
     if not os.path.isdir(folder): abort(404)
     files = sorted([f for f in os.listdir(folder) if f.lower().endswith((".jpg",".jpeg",".png",".webp"))])
     images = [f"/static/Madcakes/imgs/gallery/{slug}/{f}" for f in files]
     if not images: abort(404)
     show_age_gate = (slug in ADULT_SLUGS) and not session.get("adult_verified", False)
-    return render_template("madcakes/gallery.html", title=title, images=images, categories=CATEGORIES, show_age_gate=show_age_gate)
+    return render_template("Madcakes/gallery.html", title=title, images=images, categories=CATEGORIES, show_age_gate=show_age_gate)
 
 
 @bp.get("/all-cakes")
@@ -52,7 +52,7 @@ def all_cakes():
     PREVIEW_COUNT = 8
 
     for slug in CATEGORIES:
-        folder = os.path.join("static", "Madcakes", "imgs", "gallery", slug)
+        folder = os.path.join(current_app.root_path, "static", "Madcakes", "imgs", "gallery", slug)
         if not os.path.isdir(folder):
             continue
         files = sorted([f for f in os.listdir(folder) if f.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))])
@@ -61,10 +61,11 @@ def all_cakes():
             previews[slug] = images
 
     return render_template(
-        "madcakes/all-cakes.html",
+        "Madcakes/all-cakes.html",
         categories=CATEGORIES,
         previews=previews,
         descriptions=DESCRIPTIONS,
         adult_verified=session.get("adult_verified", False),
         adult_slugs=ADULT_SLUGS,  # <-- add this
     )
+
