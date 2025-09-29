@@ -1,15 +1,12 @@
 import os
 from dotenv import load_dotenv
-load_dotenv()
-
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DB_PATH = os.path.join(BASE_DIR, "database", "products.db")
+load_dotenv()  # fine locally; harmless in Azure
 
 class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev")
+    # FOUR slashes for an absolute sqlite path:
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL",
-        "sqlite:////home/site/data/products.db"
+        "DATABASE_URL", "sqlite:////home/site/data/products.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
@@ -17,8 +14,5 @@ class BaseConfig:
     EMAIL_USER = os.getenv("EMAIL_USER")
     EMAIL_PASS = os.getenv("EMAIL_PASS")
 
-
 class DevConfig(BaseConfig):
     DEBUG = True
-
-
